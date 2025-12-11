@@ -1,7 +1,10 @@
 const app = document.getElementById('app');
+const ticTacToeContainer = document.getElementById('tic-tac-toe_container');
 
 class TicTacToe {
-    constructor() {
+    constructor(container) {
+        this.container = container;
+
         this.boardState = [
             [null, null, null],
             [null, null, null],
@@ -18,18 +21,18 @@ class TicTacToe {
     }
 
     render() {
-        app.innerHTML = '';
+        this.container.innerHTML = '';
         
         // Game Status UI
         const gameStatusUI = document.createElement('div');
         gameStatusUI.classList.add('game-status');
         gameStatusUI.innerText = this.gameStatus;
-        app.appendChild(gameStatusUI);
+        this.container.appendChild(gameStatusUI);
 
         // Board UI
         const boardUI = document.createElement('div');
         boardUI.classList.add('board');
-        app.appendChild(boardUI);
+        this.container.appendChild(boardUI);
 
         for (let row = 0; row < this.boardState.length; row++) {
             for (let col = 0; col < this.boardState[row].length; col++) {
@@ -88,3 +91,4 @@ class TicTacToe {
 }
 
 new TicTacToe(app);
+new TicTacToe(ticTacToeContainer);
