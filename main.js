@@ -1,5 +1,4 @@
 const app = document.getElementById('app');
-const ticTacToeContainer = document.getElementById('tic-tac-toe_container');
 
 class TicTacToe {
     constructor(container) {
@@ -28,6 +27,12 @@ class TicTacToe {
         gameStatusUI.classList.add('game-status');
         gameStatusUI.innerText = this.gameStatus;
         this.container.appendChild(gameStatusUI);
+
+        // Reset Button UI
+        const resetButton = document.createElement('button');
+        resetButton.innerText = 'Сбросить игру';
+        resetButton.addEventListener('click', () => this.reset());
+        this.container.appendChild(resetButton);
 
         // Board UI
         const boardUI = document.createElement('div');
@@ -88,7 +93,18 @@ class TicTacToe {
 
         return false
     }
+
+    reset() {
+        this.boardState = [
+            [null, null, null],
+            [null, null, null],
+            [null, null, null],
+        ];
+        this.currentPlayerIndex = 0;
+        this.gameStatus = `Сейчас ходит: ${this.players[this.currentPlayerIndex]}`;
+        this.gameOver = false;
+        this.render();
+    }
 }
 
 new TicTacToe(app);
-new TicTacToe(ticTacToeContainer);
