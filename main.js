@@ -15,6 +15,7 @@ class TicTacToe {
 
         this.gameStatus = `Сейчас ходит: ${this.players[this.currentPlayerIndex]}`;
         this.gameOver = false;
+        this.winLine = null;
 
         this.render()
     }
@@ -44,6 +45,15 @@ class TicTacToe {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
                 cell.innerText = this.boardState[row][col] || '';
+
+                if (this.winLine) {
+                    for (const [winRow, winCol] of this.winLine) {
+                        if (winRow === row && winCol === col) {
+                            cell.classList.add('win-cell');
+                        }
+                    }
+                }
+
                 cell.addEventListener('click', () => this.clickCell(row, col));
                 boardUI.appendChild(cell);
             }
@@ -56,10 +66,12 @@ class TicTacToe {
         }
         this.boardState[row][col] = this.players[this.currentPlayerIndex];
 
-        if (this.checkWin()) {
+        const winLine = this.checkWin();
+        if (winLine) {
             this.gameStatus = `Победил игрок: ${this.players[this.currentPlayerIndex]}!`;
-            this.render();
+            this.winLine = winLine;
             this.gameOver = true;
+            this.render();
             return;
         }
 
@@ -73,25 +85,25 @@ class TicTacToe {
         const cellsState = this.boardState;
         for (let r = 0; r < 3; r++) {
             if (cellsState[r][0] && cellsState[r][0] === cellsState[r][1] && cellsState[r][1] === cellsState[r][2]) {
-                return true;
+                return [[r,0],[r,1],[r,2]];
             }
         }
 
         for (let c = 0; c < 3; c++) {
             if (cellsState[0][c] && cellsState[0][c] === cellsState[1][c] && cellsState[1][c] === cellsState[2][c]) {
-                return true;
+                return [[0,c],[1,c],[2,c]];
             }
         }
 
         if (cellsState[0][0] && cellsState[0][0] === cellsState[1][1] && cellsState[1][1] === cellsState[2][2]) {
-            return true;
+            return [[0,0],[1,1],[2,2]];
         }
 
         if (cellsState[0][2] && cellsState[0][2] === cellsState[1][1] && cellsState[1][1] === cellsState[2][0]) {
-            return true;
+            return [[0,2],[1,1],[2,0]];
         }
 
-        return false
+        return null;
     }
 
     reset() {
@@ -103,6 +115,7 @@ class TicTacToe {
         this.currentPlayerIndex = 0;
         this.gameStatus = `Сейчас ходит: ${this.players[this.currentPlayerIndex]}`;
         this.gameOver = false;
+        this.winLine = null;
         this.render();
     }
 }
